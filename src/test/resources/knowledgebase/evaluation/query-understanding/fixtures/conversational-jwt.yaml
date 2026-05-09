@@ -1,0 +1,25 @@
+caseId: conversational-jwt
+rawQuery: "JWT 登录失败怎么办"
+expectedNormalizedQuery: "JWT 登录失败怎么办 json web token"
+rewriteCandidate: "JWT 登录失败 json web token"
+bucketTags:
+  - conversational
+finalTopK: 1
+relevantChunkKeys:
+  - auth-guide#0
+expectedPhase2TopKeys:
+  - auth-guide#0
+expectedPhase3TopKeys:
+  - auth-guide#0
+originalBranchRanks:
+  faq#0: 1
+  auth-guide#0: 3
+rewriteBranchRanks:
+  auth-guide#0: 1
+  faq#0: 4
+originalBranchScores:
+  faq#0: 0.78
+  auth-guide#0: 0.72
+rewriteBranchScores:
+  auth-guide#0: 0.95
+  faq#0: 0.51

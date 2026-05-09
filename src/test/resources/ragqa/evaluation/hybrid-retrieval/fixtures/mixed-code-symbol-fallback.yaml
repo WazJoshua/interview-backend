@@ -1,0 +1,34 @@
+caseId: mixed-code-symbol-fallback
+rawQuery: "KnowledgeBaseQueryService 什么时候 fallback 到 dense-only"
+bucketTags:
+  - mixed
+  - code_symbol
+finalTopK: 2
+relevantChunkKeys:
+  - service-doc#0
+  - ops-runbook#0
+denseExpectedTopKeys:
+  - ops-runbook#0
+  - architecture-overview#0
+sparseExpectedTopKeys:
+  - service-doc#0
+  - ops-runbook#0
+fusedExpectedTopKeys:
+  - ops-runbook#0
+  - service-doc#0
+expectSparseOnlyRescue: false
+expectCrossBranchMismatch: false
+denseBranchRanks:
+  ops-runbook#0: 1
+  architecture-overview#0: 2
+  service-doc#0: 12
+sparseBranchRanks:
+  service-doc#0: 1
+  ops-runbook#0: 2
+denseBranchScores:
+  ops-runbook#0: 0.94
+  architecture-overview#0: 0.89
+  service-doc#0: 0.31
+sparseBranchScores:
+  service-doc#0: 4.60
+  ops-runbook#0: 2.10

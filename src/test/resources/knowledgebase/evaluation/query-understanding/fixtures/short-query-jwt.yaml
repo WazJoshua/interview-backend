@@ -1,0 +1,25 @@
+caseId: short-query-jwt
+rawQuery: "jwt"
+expectedNormalizedQuery: "jwt json web token"
+rewriteCandidate: "json web token"
+bucketTags:
+  - short_query
+finalTopK: 1
+relevantChunkKeys:
+  - auth-guide#0
+expectedPhase2TopKeys:
+  - auth-guide#0
+expectedPhase3TopKeys:
+  - auth-guide#0
+originalBranchRanks:
+  glossary#0: 1
+  auth-guide#0: 3
+rewriteBranchRanks:
+  auth-guide#0: 1
+  glossary#0: 5
+originalBranchScores:
+  glossary#0: 0.74
+  auth-guide#0: 0.68
+rewriteBranchScores:
+  auth-guide#0: 0.94
+  glossary#0: 0.45

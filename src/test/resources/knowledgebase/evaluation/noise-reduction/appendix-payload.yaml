@@ -1,0 +1,10 @@
+fixture: fixtures/appendix-payload.md
+query: Which token payload values include value_y and value_z in the appendix sample?
+expectedAnchors: []
+expectedDocHints:
+  - appendix-payload
+avoidPatterns:
+  - token=
+  - payload=
+avoidReasonCodes:
+  - APPENDIX_SAMPLE_PAYLOAD

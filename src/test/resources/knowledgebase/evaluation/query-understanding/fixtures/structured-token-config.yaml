@@ -1,0 +1,18 @@
+caseId: structured-token-config
+rawQuery: "spring.profiles.active"
+expectedNormalizedQuery: "spring.profiles.active"
+rewriteCandidate: ""
+bucketTags:
+  - structured_token
+finalTopK: 1
+relevantChunkKeys:
+  - config-doc#0
+expectedPhase2TopKeys:
+  - config-doc#0
+expectedPhase3TopKeys:
+  - config-doc#0
+originalBranchRanks:
+  config-doc#0: 1
+rewriteBranchRanks: {}
+originalBranchScores:
+  config-doc#0: 0.99

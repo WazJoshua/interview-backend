@@ -1,0 +1,203 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'org.springframework.boot' version '4.0.2'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.josh'
+version = '0.0.1-SNAPSHOT'
+description = 'intelligent-interview-backend'
+
+def testcontainersVersion = '2.0.3'
+def jacocoVersion = '0.8.14'
+def coverageExclusions = [
+    '**/*Application.class',
+    '**/config/**',
+    '**/dto/**',
+    '**/model/**',
+    '**/org/openapitools/jackson/nullable/**'
+]
+def mergedLineCoverageThreshold = 0.75
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+jacoco {
+    toolVersion = jacocoVersion
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+   /* maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/spring' }
+    maven { url 'https://maven.aliyun.com/repository/spring-plugin' }*/
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-restclient'
+    implementation 'com.openai:openai-java:4.26.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+// Source: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-webmvc-test
+    implementation 'org.springframework.boot:spring-boot-webmvc-test:4.1.0-M2'
+    // pgvector for vector similarity search
+    implementation 'com.pgvector:pgvector:0.1.6'
+
+    // Apache Tika for document parsing (PDF/Word)
+    implementation 'org.apache.tika:tika-core:2.9.2'
+    implementation 'org.apache.tika:tika-parsers-standard-package:2.9.2'
+    implementation 'com.vladsch.flexmark:flexmark-all:0.64.8'
+    implementation 'org.apache.commons:commons-csv:1.12.0'
+
+    // JWT for authentication
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    // API Documentation
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Development tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Database
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Flyway for database migration
+    // Source: https://mvnrepository.com/artifact/org.flywaydb/flyway-core
+    implementation 'org.springframework.boot:spring-boot-starter-flyway'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
+    implementation('com.alipay.sdk:alipay-sdk-java-v3:3.1.70.ALL') {
+        exclude group: 'org.openapitools', module: 'jackson-databind-nullable'
+    }
+
+    // Configuration processor
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Testcontainers for integration tests
+    testImplementation "org.testcontainers:testcontainers:${testcontainersVersion}"
+    testImplementation "org.testcontainers:testcontainers-postgresql:${testcontainersVersion}"
+    testImplementation "org.testcontainers:testcontainers-junit-jupiter:${testcontainersVersion}"
+    testImplementation 'org.testcontainers:testcontainers-rabbitmq:2.0.2'
+    testImplementation 'com.redis:testcontainers-redis:2.2.2'
+
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    jacoco {
+        destinationFile = layout.buildDirectory.file('jacoco/test.exec').get().asFile
+    }
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integrationTest/java')
+        }
+        resources.srcDir file('src/integrationTest/resources')
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+}
+
+tasks.register('integrationTest', Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    useJUnitPlatform()
+    shouldRunAfter test
+    jacoco {
+        destinationFile = layout.buildDirectory.file('jacoco/integrationTest.exec').get().asFile
+    }
+}
+
+tasks.register('jacocoMergedReport', org.gradle.testing.jacoco.tasks.JacocoReport) {
+    group = 'verification'
+    description = 'Generates a merged JaCoCo report for unit and integration tests.'
+    dependsOn tasks.named('test'), tasks.named('integrationTest')
+
+    executionData.from(
+        layout.buildDirectory.file('jacoco/test.exec'),
+        layout.buildDirectory.file('jacoco/integrationTest.exec')
+    )
+
+    sourceDirectories.from(sourceSets.main.java.srcDirs)
+    classDirectories.from(files(sourceSets.main.output.classesDirs).asFileTree.matching {
+        exclude coverageExclusions
+    })
+
+    reports {
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/merged/html')
+        xml.required = true
+        xml.outputLocation = layout.buildDirectory.file('reports/jacoco/merged/jacocoMergedReport.xml')
+        csv.required = false
+    }
+}
+
+tasks.register('jacocoMergedCoverageVerification', org.gradle.testing.jacoco.tasks.JacocoCoverageVerification) {
+    group = 'verification'
+    description = 'Verifies merged JaCoCo coverage for unit and integration tests.'
+    dependsOn tasks.named('jacocoMergedReport')
+
+    executionData.from(
+        layout.buildDirectory.file('jacoco/test.exec'),
+        layout.buildDirectory.file('jacoco/integrationTest.exec')
+    )
+
+    sourceDirectories.from(sourceSets.main.java.srcDirs)
+    classDirectories.from(files(sourceSets.main.output.classesDirs).asFileTree.matching {
+        exclude coverageExclusions
+    })
+
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = mergedLineCoverageThreshold
+            }
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn integrationTest
+    dependsOn tasks.named('jacocoMergedReport')
+    dependsOn tasks.named('jacocoMergedCoverageVerification')
+}

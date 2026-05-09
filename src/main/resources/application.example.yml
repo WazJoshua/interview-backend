@@ -1,0 +1,352 @@
+# Example configuration only.
+# Copy the relevant sections into config/application-local.yml or a server-side
+# external config file and replace all placeholder values before use.
+spring:
+  application:
+    name: intelligent-interview-backend
+
+  profiles:
+    active: dev
+
+  threads:
+    virtual:
+      enabled: true
+
+  datasource:
+    url: jdbc:postgresql://<db-host>:5432/<db-name>
+    username: <db-username>
+    password: <db-password>
+    driver-class-name: org.postgresql.Driver
+
+  data:
+    redis:
+      host: <redis-host>
+      port: 6379
+      password: <redis-password-or-empty>
+      database: 0
+      timeout: 5000ms
+
+  rabbitmq:
+    host: <rabbitmq-host>
+    port: 5672
+    username: <rabbitmq-username>
+    password: <rabbitmq-password>
+    virtual-host: /
+    publisher-confirm-type: correlated
+    publisher-returns: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    baseline-version: 0
+    validate-on-migrate: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 16MB
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
+jwt:
+  secret: <replace-with-long-random-secret>
+  access-token-expiration: 7200
+  refresh-token-expiration: 604800
+
+server:
+  port: 8773
+
+app:
+  chat:
+    timeline-window-size: 100
+    default-context-message-limit: 6
+    default-context-budget: 4000
+    max-preview-length: 500
+    ragqa-include-recent-turn-context: false
+  user:
+    avatar-storage-path: uploads/avatars
+  resume:
+    storage-path: uploads/resumes
+  interview:
+    scoring:
+      deep-dive-bonus-mode: sigmoid
+    timeout:
+      enabled: true
+      poll-interval: 60000
+      idle-threshold: 1800000
+      batch-size: 50
+  kb:
+    storage-path: uploads/kb
+    embedding:
+      progress-batch-size: 20
+      max-document-chars: 500000
+      max-chunks: 800
+      default-top-k: 5
+      max-top-k: 20
+    query-understanding:
+      enabled: true
+      rewrite-enabled: false
+      dual-branch-enabled: false
+      log-query-max-chars: 300
+      alias-dictionary: []
+    preprocessing:
+      chunking:
+        structureAwareEnabled: false
+        shadowReportEnabled: true
+      profiles:
+        default:
+          drop-appendix-samples: false
+        appendix-aggressive:
+          drop-appendix-samples: true
+      low-signal:
+        appendix:
+          min-literal-line-run: 8
+          min-literal-line-length: 32
+          max-natural-language-ratio: 0.20
+          section-keywords:
+            - appendix
+            - sample
+            - samples
+            - test vector
+            - test vectors
+            - 附录
+            - 示例
+            - 样例
+            - 参考
+      quality:
+        min-retained-block-ratio: 0.10
+        max-non-readable-char-ratio: 0.50
+        min-normalized-text-chars: 200
+    query:
+      source-content-max-chars: 500
+      hybrid:
+        sparse-enabled: false
+        force-sparse-without-literal-signal: false
+        dense-candidate-top-k-per-branch: 8
+        sparse-candidate-top-k: 12
+        sparse-timeout-ms: 200
+        sparse-content-weight: 1.0
+        sparse-entity-weight-default: 3.0
+        sparse-entity-weight-single-literal: 4.0
+        sparse-entity-weight-multi-literal: 5.0
+        sparse-exact-boost: 2.0
+        sparse-ready-version: HYBRID_SPARSE_V1
+  llm:
+    secret:
+      current-key-version: current
+      master-keys:
+        current: <base64-encoded-32-byte-master-key>
+    # Runtime provider/model/routing/rerank truth is managed in database.
+    # Use admin AI resources APIs or docs/sql/2026-04-08-seed-kb-query-rerank.sql
+    # to provision records instead of treating this file as production truth.
+    routing:
+      purposes:
+        parse:
+          strategy: single
+          provider: primary_chat
+          fallback: []
+        analysis:
+          strategy: single
+          provider: primary_chat
+          fallback: []
+          timeout-ms: 300000
+        rag:
+          strategy: single
+          provider: router_provider
+          fallback: []
+        kb_query_rewrite:
+          strategy: single
+          provider: router_provider
+          fallback: []
+          timeout-ms: 1200
+          max-retries: 1
+        kb_query_embedding:
+          strategy: single
+          provider: embedding_provider
+          fallback: []
+        kb_document_embedding:
+          strategy: single
+          provider: embedding_provider
+          fallback: []
+        interview_question_generation:
+          strategy: single
+          provider: primary_chat
+          fallback: []
+          timeout-ms: 2500
+          max-retries: 0
+        interview_follow_up_generation:
+          strategy: single
+          provider: primary_chat
+          fallback: []
+          timeout-ms: 1200
+          max-retries: 0
+        interview_answer_evaluation:
+          strategy: single
+          provider: primary_chat
+          fallback: []
+          timeout-ms: 2500
+          max-retries: 0
+        interview_report_generation:
+          strategy: single
+          provider: primary_chat
+          fallback: []
+          timeout-ms: 5000
+          max-retries: 1
+          retry-backoff-ms: 500
+    breaker:
+      default-failure-threshold: 3
+      default-open-duration-seconds: 30
+      default-window-duration-seconds: 60
+    providers:
+      primary_chat:
+        base-url: https://provider-default.example.com/v1
+        api-key: <default-provider-api-key>
+        template:
+          enabled: true
+          strict: false
+        chat:
+          models:
+            parse: <default-parse-model>
+            analysis: <default-analysis-model>
+            rag: <default-rag-model>
+            kb_query_rewrite: <default-rewrite-model>
+            interview_question_generation: <default-interview-model>
+            interview_follow_up_generation: <default-interview-model>
+            interview_answer_evaluation: <default-interview-model>
+            interview_report_generation: <default-interview-model>
+        embedding:
+          dimension: 2048
+          models:
+            kb_query_embedding: <default-query-embedding-model>
+            kb_document_embedding: <default-document-embedding-model>
+        timeout-ms: 30000
+        max-retries: 3
+        retry-backoff-ms: 500
+      router_provider:
+        base-url: https://router.example.com/v1
+        api-key: <router-api-key>
+        chat:
+          models:
+            parse: <router-parse-model>
+            analysis: <router-analysis-model>
+            rag: <router-rag-model>
+            kb_query_rewrite: <router-rewrite-model>
+        timeout-ms: 30000
+        max-retries: 3
+        retry-backoff-ms: 500
+      chat_provider:
+        base-url: https://chat-provider.example.com/v1
+        api-key: <chat-provider-api-key>
+        chat:
+          models:
+            parse: <chat-provider-parse-model>
+            rag: <chat-provider-rag-model>
+            kb_query_rewrite: <chat-provider-rewrite-model>
+        timeout-ms: 30000
+        max-retries: 3
+        retry-backoff-ms: 500
+
+      embedding_provider:
+        base-url: https://embedding-provider.example.com/v1
+        api-key: <embedding-provider-api-key>
+        template:
+          enabled: false
+        embedding:
+          dimension: 2048
+  billing:
+    order:
+      default-expire-minutes: 30
+    subscription:
+      reconciliation-auto-refund-enabled: false
+      renewal-preparation:
+        enabled: true
+        poll-interval: 15m
+    payment-event-recovery:
+      enabled: true
+      poll-interval: 5m
+    reconciliation:
+      scan-batch-size: 100
+    legacy-vip:
+      read-compat-enabled: true
+          models:
+            kb_query_embedding: <embedding-query-model>
+            kb_document_embedding: <embedding-document-model>
+        timeout-ms: 30000
+        max-retries: 3
+        retry-backoff-ms: 500
+      embedding_fallback:
+        base-url: https://embedding-fallback.example.com/v1
+        api-key: <embedding-fallback-api-key>
+        template:
+          enabled: true
+          strict: true
+          root: classpath:/llm-templates/Nvidia
+        embedding:
+          dimension: 2048
+          models:
+            kb_query_embedding: <fallback-query-embedding-model>
+            kb_document_embedding: <fallback-document-embedding-model>
+          input-types:
+            kb_query_embedding: query
+            kb_document_embedding: passage
+        timeout-ms: 30000
+        max-retries: 3
+        retry-backoff-ms: 500
+  mq:
+    resume-parse:
+      exchange: resume.parse.exchange
+      queue: resume.parse.queue
+      routing-key: resume.parse
+      dlx: resume.parse.dlx
+      dlq: resume.parse.dlq
+      dlq-routing-key: resume.parse.dlq
+      message-timeout: 180000
+      max-retries: 3
+      heartbeat-interval: 10000
+      idempotent-cache-ttl: 86400000
+    kb-doc:
+      exchange: kb.doc.exchange
+      queue: kb.doc.queue
+      routing-key: kb.doc
+      dlx: kb.doc.dlx
+      dlq: kb.doc.dlq
+      dlq-routing-key: kb.doc.dlq
+      message-timeout: 300000
+      max-retries: 3
+      heartbeat-interval: 15000
+      idempotent-cache-ttl: 7200000
+    resume-analysis:
+      exchange: resume.analysis.exchange
+      queue: resume.analysis.queue
+      routing-key: resume.analysis
+      dlx: resume.analysis.dlx
+      dlq: resume.analysis.dlq
+      dlq-routing-key: resume.analysis.dlq
+      message-timeout: 300000
+      heartbeat-interval: 15000
+      idempotent-cache-ttl: 86400000
+  outbox:
+    poll-interval: 5000
+    recovery-interval: 10000
+    monitor-interval: 60000
+    cleanup-interval: 3600000
+    cleanup-retention-days: 7
+    backlog-alert-threshold: 100
+    max-retries: 5
+    processing-timeout: 30000
+  resume-analysis:
+    timeout: 300000
+    max-retries: 2
+    cache-ttl: 86400000

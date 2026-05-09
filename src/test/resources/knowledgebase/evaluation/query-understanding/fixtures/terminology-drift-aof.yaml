@@ -1,0 +1,25 @@
+caseId: terminology-drift-aof
+rawQuery: "aof 持久化"
+expectedNormalizedQuery: "aof 持久化 append only file"
+rewriteCandidate: "append only file persistence"
+bucketTags:
+  - terminology_drift
+finalTopK: 1
+relevantChunkKeys:
+  - redis-aof#0
+expectedPhase2TopKeys:
+  - redis-aof#0
+expectedPhase3TopKeys:
+  - redis-aof#0
+originalBranchRanks:
+  redis-overview#0: 1
+  redis-aof#0: 4
+rewriteBranchRanks:
+  redis-aof#0: 1
+  redis-overview#0: 5
+originalBranchScores:
+  redis-overview#0: 0.77
+  redis-aof#0: 0.69
+rewriteBranchScores:
+  redis-aof#0: 0.96
+  redis-overview#0: 0.49

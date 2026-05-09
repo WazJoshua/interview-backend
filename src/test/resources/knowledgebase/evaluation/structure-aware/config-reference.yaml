@@ -1,0 +1,8 @@
+fixture: fixtures/config-reference.md
+query: what is the default timeout value
+queryType: TABLE_DRIVEN
+expectedAnchors:
+  - TIMEOUT
+  - 30000
+expectedSectionHints:
+  - Environment Variables

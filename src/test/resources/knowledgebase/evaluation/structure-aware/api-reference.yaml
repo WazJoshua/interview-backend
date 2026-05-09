@@ -1,0 +1,8 @@
+fixture: fixtures/api-reference.md
+query: how to authenticate user
+queryType: TITLE_DRIVEN
+expectedAnchors:
+  - /api/auth/login
+  - authenticate
+expectedSectionHints:
+  - Authentication

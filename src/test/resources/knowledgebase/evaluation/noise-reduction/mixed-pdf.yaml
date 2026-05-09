@@ -1,0 +1,12 @@
+fixture: fixtures/mixed-content.pdf.b64
+query: Where does the PDF mention AUTH_001 invalid token and sample payload?
+expectedAnchors:
+  - AUTH_001
+  - ./gradlew test
+expectedDocHints:
+  - mixed-content
+avoidPatterns:
+  - token=
+  - payload=
+avoidReasonCodes:
+  - APPENDIX_SAMPLE_PAYLOAD

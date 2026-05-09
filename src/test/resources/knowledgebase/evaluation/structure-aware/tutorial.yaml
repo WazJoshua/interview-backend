@@ -1,0 +1,8 @@
+fixture: fixtures/tutorial.md
+query: how to initialize sdk client
+queryType: STEP_DRIVEN
+expectedAnchors:
+  - SdkClient
+  - builder
+expectedSectionHints:
+  - Step 3

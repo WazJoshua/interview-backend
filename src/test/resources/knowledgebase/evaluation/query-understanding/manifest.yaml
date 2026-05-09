@@ -1,0 +1,6 @@
+fixtures:
+  - fixtures/conversational-jwt.yaml
+  - fixtures/terminology-drift-aof.yaml
+  - fixtures/short-query-jwt.yaml
+  - fixtures/long-query-rollout.yaml
+  - fixtures/structured-token-config.yaml

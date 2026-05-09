@@ -1,0 +1,54 @@
+app:
+  mq:
+    listeners-enabled: false
+    publisher-confirm-timeout: PT5S
+    resume-parse:
+      exchange: test.resume-parse.exchange
+      queue: test.resume-parse.queue
+      routing-key: test.resume-parse.routing-key
+      dlx: test.resume-parse.dlx
+      dlq: test.resume-parse.dlq
+      dlq-routing-key: test.resume-parse.dlq-routing-key
+    kb-doc:
+      exchange: test.kb-doc.exchange
+      queue: test.kb-doc.queue
+      routing-key: test.kb-doc.routing-key
+      dlx: test.kb-doc.dlx
+      dlq: test.kb-doc.dlq
+      dlq-routing-key: test.kb-doc.dlq-routing-key
+    resume-analysis:
+      exchange: test.resume-analysis.exchange
+      queue: test.resume-analysis.queue
+      routing-key: test.resume-analysis.routing-key
+      dlx: test.resume-analysis.dlx
+      dlq: test.resume-analysis.dlq
+      dlq-routing-key: test.resume-analysis.dlq-routing-key
+  interview:
+    timeout:
+      enabled: false
+  llm:
+    secret:
+      current-key-version: current
+      master-keys:
+        current: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+        previous: ZmVkY2JhOTg3NjU0MzIxMGZlZGNiYTk4NzY1NDMyMTA=
+    routing:
+      purposes:
+        parse:
+          strategy: single
+          provider: default
+        analysis:
+          strategy: single
+          provider: default
+        rag:
+          strategy: single
+          provider: default
+    providers:
+      default:
+        base-url: https://provider.example.com/v1
+        api-key: test-key
+        chat:
+          models:
+            parse: test-parse-model
+            analysis: test-analysis-model
+            rag: test-rag-model

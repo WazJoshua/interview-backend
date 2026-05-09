@@ -1,0 +1,24 @@
+caseId: structured-token-auth-code
+rawQuery: "AUTH_001"
+bucketTags:
+  - structured_token
+  - error_code
+finalTopK: 1
+relevantChunkKeys:
+  - auth-guide#0
+denseExpectedTopKeys:
+  - faq#0
+sparseExpectedTopKeys:
+  - auth-guide#0
+fusedExpectedTopKeys:
+  - auth-guide#0
+expectSparseOnlyRescue: true
+expectCrossBranchMismatch: true
+denseBranchRanks:
+  faq#0: 2
+sparseBranchRanks:
+  auth-guide#0: 1
+denseBranchScores:
+  faq#0: 0.93
+sparseBranchScores:
+  auth-guide#0: 5.10

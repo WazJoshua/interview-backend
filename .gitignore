@@ -1,0 +1,112 @@
+HELP.md
+.gradle
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+.gradle-user-home
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Java ###
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+### Logs ###
+logs/
+log/
+*.log
+*.tmp
+
+### IDE ###
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### Environment ###
+.env
+.env.local
+.env.*.local
+env/
+config/
+application-*.yml
+application-*.properties
+!application-example.yml
+!application-example.properties
+
+### Database ###
+*.sql.zip
+*.dump
+flyway/*/V*__*.sql
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Temp ###
+*.swp
+*.swo
+*~
+
+### Coverage ###
+jacoco/
+coverage/
+*.exec
+
+### Docker ###
+.docker/
+docker-compose.override.yml
+
+### Certificates ###
+*.jks
+*.p12
+*.pem
+*.key
+*.crt
+
+### Uploads ###
+uploads/
+files/
+
+### IDE Temp Files ###
+*.orig
+*.rej
+*.patch

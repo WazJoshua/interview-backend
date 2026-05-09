@@ -1,0 +1,4 @@
+fixtures:
+  - fixtures/structured-token-auth-code.yaml
+  - fixtures/semantic-drift-config-rollout.yaml
+  - fixtures/mixed-code-symbol-fallback.yaml

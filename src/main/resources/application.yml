@@ -1,0 +1,11 @@
+# Bootstrap-only defaults. Real local configuration should live in
+# config/application-local.yml and be activated explicitly with:
+#   SPRING_PROFILES_ACTIVE=local
+spring:
+  application:
+    name: intelligent-interview-backend
+
+  threads:
+    virtual:
+      enabled: true
+

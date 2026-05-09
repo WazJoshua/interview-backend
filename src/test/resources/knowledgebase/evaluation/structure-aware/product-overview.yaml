@@ -1,0 +1,8 @@
+fixture: fixtures/product-overview.md
+query: what security features are available
+queryType: BODY_SEMANTIC
+expectedAnchors:
+  - access control
+  - encryption
+expectedSectionHints:
+  - Security

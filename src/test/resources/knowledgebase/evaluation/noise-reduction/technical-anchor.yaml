@@ -1,0 +1,11 @@
+fixture: fixtures/technical-anchor.md
+query: How do I fix AUTH_001 invalid token with gradle?
+expectedAnchors:
+  - AUTH_001
+  - ./gradlew test
+expectedDocHints:
+  - technical-anchor
+avoidPatterns:
+  - token=
+avoidReasonCodes:
+  - APPENDIX_SAMPLE_PAYLOAD

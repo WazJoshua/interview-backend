@@ -1,0 +1,15 @@
+package com.josh.interviewj.chat.model;
+
+public enum ChatMessageType {
+    TEXT,
+    QUESTION,
+    ANSWER,
+    EVALUATION,
+    SOURCE_SNAPSHOT,
+    INTERVIEW_QUESTION,
+    INTERVIEW_ANSWER,
+    INTERVIEW_EVALUATION,
+    INTERVIEW_FOLLOW_UP,
+    INTERVIEW_SYSTEM,
+    INTERVIEW_REPORT_SUMMARY
+}

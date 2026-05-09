@@ -1,0 +1,34 @@
+caseId: semantic-drift-config-rollout
+rawQuery: "rollout 时 spring.profiles.active 会影响什么"
+bucketTags:
+  - semantic_drift
+  - config_key
+finalTopK: 2
+relevantChunkKeys:
+  - rollout-guide#0
+  - config-ref#0
+denseExpectedTopKeys:
+  - rollout-guide#0
+  - faq#0
+sparseExpectedTopKeys:
+  - config-ref#0
+  - rollout-guide#0
+fusedExpectedTopKeys:
+  - rollout-guide#0
+  - config-ref#0
+expectSparseOnlyRescue: false
+expectCrossBranchMismatch: false
+denseBranchRanks:
+  rollout-guide#0: 1
+  faq#0: 2
+  config-ref#0: 5
+sparseBranchRanks:
+  config-ref#0: 1
+  rollout-guide#0: 2
+denseBranchScores:
+  rollout-guide#0: 0.95
+  faq#0: 0.88
+  config-ref#0: 0.24
+sparseBranchScores:
+  config-ref#0: 5.00
+  rollout-guide#0: 2.20

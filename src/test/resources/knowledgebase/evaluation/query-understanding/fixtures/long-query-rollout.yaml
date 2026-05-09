@@ -1,0 +1,34 @@
+caseId: long-query-rollout
+rawQuery: "如果我要在不改 public API 的情况下把 rewrite、dual branch retrieval、timeout fallback 和 rollout gate 一起做稳，应该怎么拆实施步骤"
+expectedNormalizedQuery: "如果我要在不改 public API 的情况下把 rewrite、dual branch retrieval、timeout fallback 和 rollout gate 一起做稳,应该怎么拆实施步骤"
+rewriteCandidate: "query understanding rollout rewrite dual branch timeout fallback"
+bucketTags:
+  - long_query
+finalTopK: 2
+relevantChunkKeys:
+  - rollout-guide#0
+  - timeout-gate#0
+expectedPhase2TopKeys:
+  - rollout-guide#0
+  - timeout-gate#0
+expectedPhase3TopKeys:
+  - rollout-guide#0
+  - timeout-gate#0
+originalBranchRanks:
+  baseline-note#0: 1
+  unrelated#0: 2
+  rollout-guide#0: 3
+  timeout-gate#0: 4
+rewriteBranchRanks:
+  rollout-guide#0: 1
+  timeout-gate#0: 2
+  unrelated#0: 5
+originalBranchScores:
+  baseline-note#0: 0.73
+  unrelated#0: 0.71
+  rollout-guide#0: 0.69
+  timeout-gate#0: 0.67
+rewriteBranchScores:
+  rollout-guide#0: 0.96
+  timeout-gate#0: 0.93
+  unrelated#0: 0.44
