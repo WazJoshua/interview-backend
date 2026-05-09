@@ -201,27 +201,6 @@ src/main/resources/llm-templates/<provider>
 - 一旦模板命中，模板渲染、HTTP 调用、响应抽取等任一步失败都直接 fail-fast
 - 新增 provider 后，需要重新构建并发布应用，`resources` 变更不会自动热生效
 
-## API 与设计文档
-
-正式 API 文档入口：
-
-- [docs/api/README.md](docs/api/README.md)
-- [docs/api/auth-v1.11.md](docs/api/auth-v1.11.md)
-- [docs/api/users-v1.12.md](docs/api/users-v1.12.md)
-- [docs/api/billing-payment-v1.00.md](docs/api/billing-payment-v1.00.md)
-- [docs/api/admin-prompt-template-v1.00.md](docs/api/admin-prompt-template-v1.00.md)
-- [docs/api/resumes-v1.09.md](docs/api/resumes-v1.09.md)
-- [docs/api/interviews-v1.00.md](docs/api/interviews-v1.00.md)
-- [docs/api/knowledge-bases-v1.04.md](docs/api/knowledge-bases-v1.04.md)
-
-Interview 相关设计/实施文档：
-
-- [docs/interview/00-interview-api-v1.00.md](docs/interview/00-interview-api-v1.00.md)
-- [docs/interview/2026-03-21-interview-unified-chat-design-plan.md](docs/interview/2026-03-21-interview-unified-chat-design-plan.md)
-- [docs/interview/2026-03-25-interview-unified-chat-implementation.md](docs/interview/2026-03-25-interview-unified-chat-implementation.md)
-- [docs/interview/2026-03-27-interview-llm-design.md](docs/interview/2026-03-27-interview-llm-design.md)
-- [docs/interview/2026-03-27-interview-llm-implementation.md](docs/interview/2026-03-27-interview-llm-implementation.md)
-
 ## 项目结构
 
 ```text
